@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل تثبيت وتشغيل Ollama</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h2 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 3px 5px;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+        }
+        pre {
+            background-color: #282c34;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background-color: #2980b9;
+        }
+        .step {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .note {
+            background-color: #fdfd96;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+        .model-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .model-card h3 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>دليل تثبيت وتشغيل Ollama مع واجهة مستخدم</h1>
+        <p>الدليل الشامل لتشغيل نماذج الذكاء الاصطناعي محلياً على جهازك</p>
+    </header>
+
+    <div class="container">
+        <h2>مقدمة عن Ollama</h2>
+        <p>Ollama هي أداة مفتوحة المصدر تتيح لك تشغيل نماذج الذكاء الاصطناعي اللغوية الكبيرة (LLMs) محلياً على جهازك دون الحاجة للاتصال بالإنترنت. يمكنك استخدامها للبرمجة، الكتابة الإبداعية، الترجمة، المساعدة الشخصية وأكثر.</p>
+        
+        <div class="note">
+            <strong>ملاحظة:</strong> تعمل Ollama بشكل أفضل على أجهزة ذات مواصفات جيدة، لكن يمكن تشغيلها على أجهزة متوسطة مثل i5 من الجيل الثالث باستخدام النماذج الخفيفة.
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>متطلبات النظام</h2>
+        <ul>
+            <li><strong>نظام التشغيل:</strong> Windows 10/11، macOS، أو Linux</li>
+            <li><strong>المعالج:</strong> Intel/AMD CPU (يعمل على i5 الجيل الثالث ولكن بأداء محدود)</li>
+            <li><strong>الذاكرة (RAM):</strong> 8GB على الأقل، 16GB مفضل</li>
+            <li><strong>مساحة التخزين:</strong> 10GB على الأقل للنماذج الصغيرة</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>خطوات التثبيت</h2>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(event, 'windows')">Windows</div>
+            <div class="tab" onclick="switchTab(event, 'linux')">Linux</div>
+            <div class="tab" onclick="switchTab(event, 'macos')">macOS</div>
+        </div>
+        
+        <div id="windows" class="tab-content active">
+            <div class="step">
+                <h3>تثبيت Ollama على Windows</h3>
+                <ol>
+                    <li>قم بتحميل المثبت من الموقع الرسمي: <a href="https://ollama.com/download/windows" target="_blank">https://ollama.com/download/windows</a></li>
+                    <li>قم بتشغيل الملف الذي تم تحميله</li>
+                    <li>اتبع خطوات التثبيت البسيطة</li>
+                    <li>انتظر حتى يكتمل التثبيت وسيبدأ Ollama في العمل تلقائياً في الخلفية</li>
+                </ol>
+                <div class="note">
+                    <strong>ملاحظة:</strong> يجب أن تكون قد قمت بتمكين ميزة WSL (Windows Subsystem for Linux) أولاً.
+                </div>
+            </div>
+        </div>
+        
+        <div id="linux" class="tab-content">
+            <div class="step">
+                <h3>تثبيت Ollama على Linux</h3>
+                <p>استخدم الأمر التالي لتثبيت Ollama:</p>
+                <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>curl -fsSL https://ollama.com/install.sh | sh</pre>
+                <p>بعد الانتهاء من التثبيت، يمكنك التحقق من أن Ollama يعمل بشكل صحيح عن طريق:</p>
+                <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>ollama --version</pre>
+            </div>
+        </div>
+        
+        <div id="macos" class="tab-content">
+            <div class="step">
+                <h3>تثبيت Ollama على macOS</h3>
+                <p>هناك طريقتان لتثبيت Ollama على macOS:</p>
+                <p><strong>الطريقة الأولى:</strong> تحميل التطبيق</p>
+                <ol>
+                    <li>قم بتحميل التطبيق من الموقع الرسمي: <a href="https://ollama.com/download/mac" target="_blank">https://ollama.com/download/mac</a></li>
+                    <li>قم بفتح الملف الذي تم تحميله ونقل التطبيق إلى مجلد التطبيقات</li>
+                    <li>قم بتشغيل التطبيق</li>
+                </ol>
+                <p><strong>الطريقة الثانية:</strong> استخدام سطر الأوامر</p>
+                <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>curl -fsSL https://ollama.com/install.sh | sh</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>تثبيت واجهة المستخدم الرسومية (Open WebUI)</h2>
+        <p>Ollama لا تأتي مع واجهة مستخدم رسومية، لذلك سنقوم بتثبيت Open WebUI، وهي واجهة مجانية ومفتوحة المصدر.</p>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(event, 'docker')">طريقة Docker</div>
+            <div class="tab" onclick="switchTab(event, 'manual')">التثبيت اليدوي</div>
+        </div>
+        
+        <div id="docker" class="tab-content active">
+            <div class="step">
+                <h3>تثبيت Open WebUI باستخدام Docker</h3>
+                <ol>
+                    <li>تأكد من تثبيت <a href="https://www.docker.com/products/docker-desktop/" target="_blank">Docker</a> على جهازك أولاً</li>
+                    <li>قم بتشغيل الأمر التالي لتثبيت وتشغيل Open WebUI:</li>
+                </ol>
+                <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>docker run -d --name open-webui -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data ghcr.io/open-webui/open-webui:main</pre>
+                <p>بعد الانتهاء من التثبيت، افتح المتصفح وانتقل إلى:</p>
+                <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>http://localhost:3000</pre>
+            </div>
+        </div>
+        
+        <div id="manual" class="tab-content">
+            <div class="step">
+                <h3>التثبيت اليدوي لـ Open WebUI</h3>
+                <p>متطلبات مسبقة:</p>
+                <ul>
+                    <li>تثبيت <a href="https://nodejs.org/" target="_blank">Node.js</a></li>
+                    <li>تثبيت <a href="https://git-scm.com/downloads" target="_blank">Git</a></li>
+                </ul>
+                <p>خطوات التثبيت:</p>
+                <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>git clone https://github.com/open-webui/open-webui.git
+cd open-webui
+npm install
+npm run dev</pre>
+                <p>بعد الانتهاء، افتح المتصفح وانتقل إلى:</p>
+                <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>http://localhost:3000</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>الإعداد الأولي للواجهة</h2>
+        <div class="step">
+            <h3>إعداد Open WebUI</h3>
+            <ol>
+                <li>قم بإنشاء حساب جديد عند فتح واجهة Open WebUI لأول مرة</li>
+                <li>انتقل إلى صفحة الإعدادات (Settings)</li>
+                <li>تأكد من إضافة عنوان Ollama API: <code>http://localhost:11434</code></li>
+                <li>احفظ الإعدادات</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>تحميل وتشغيل النماذج</h2>
+        <p>الآن بعد تثبيت Ollama والواجهة، يمكنك تحميل وتشغيل نماذج الذكاء الاصطناعي.</p>
+        
+        <div class="step">
+            <h3>تحميل النموذج من واجهة Open WebUI</h3>
+            <ol>
+                <li>انتقل إلى قسم "Models" من القائمة الجانبية</li>
+                <li>ابحث عن النموذج المناسب لجهازك</li>
+                <li>انقر على زر "Pull" لتحميل النموذج</li>
+                <li>انتظر حتى يكتمل التحميل</li>
+            </ol>
+        </div>
+        
+        <div class="step">
+            <h3>تحميل النموذج من سطر الأوامر</h3>
+            <p>يمكنك أيضًا تحميل النماذج باستخدام سطر الأوامر:</p>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>ollama pull phi</pre>
+            <p>لتشغيل النموذج بعد التحميل:</p>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>ollama run phi</pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>النماذج المناسبة للأجهزة الضعيفة (i5 الجيل الثالث)</h2>
+        
+        <div class="model-card">
+            <h3>Phi-2 (2.7GB)</h3>
+            <p><strong>الوصف:</strong> نموذج خفيف جدًا مع أداء ممتاز في البرمجة، مثالي للأجهزة الضعيفة</p>
+            <p><strong>أمر التثبيت:</strong></p>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>ollama pull phi</pre>
+        </div>
+        
+        <div class="model-card">
+            <h3>TinyLlama (1.1GB)</h3>
+            <p><strong>الوصف:</strong> أصغر نموذج، سريع جدًا ويستهلك موارد قليلة</p>
+            <p><strong>أمر التثبيت:</strong></p>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>ollama pull tinyllama</pre>
+        </div>
+        
+        <div class="model-card">
+            <h3>CodeLlama-7B (7GB)</h3>
+            <p><strong>الوصف:</strong> متخصص في البرمجة وكتابة الأكواد</p>
+            <p><strong>أمر التثبيت:</strong></p>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>ollama pull codellama:7b</pre>
+        </div>
+        
+        <div class="model-card">
+            <h3>Mistral-7B (7GB)</h3>
+            <p><strong>الوصف:</strong> متوازن للمهام العامة والبرمجة</p>
+            <p><strong>أمر التثبيت:</strong></p>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>ollama pull mistral</pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>نصائح لتحسين الأداء</h2>
+        <ol>
+            <li><strong>قلل قيمة سياق المحادثة (Context Length):</strong> استخدم <code>--num_ctx 1024</code> لتحسين الأداء</li>
+            <li><strong>أغلق البرامج الأخرى:</strong> تأكد من عدم تشغيل برامج تستهلك موارد كثيرة أثناء استخدام Ollama</li>
+            <li><strong>استخدم النماذج الصغيرة:</strong> اختر النماذج بحجم 7B أو أقل للأجهزة الضعيفة</li>
+            <li><strong>استخدم ملف Modelfile لضبط الإعدادات:</strong></li>
+        </ol>
+        <p>مثال على ملف Modelfile:</p>
+        <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>FROM phi
+SYSTEM "أنت مساعد برمجة متخصص في تعريب الألعاب، تقدم المساعدة باللغة العربية"
+PARAMETER temperature 0.7
+PARAMETER num_ctx 1024</pre>
+
+        <p>لإنشاء نموذج مخصص باستخدام الملف:</p>
+        <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button>ollama create game-translator -f game-translator.modelfile
+ollama run game-translator</pre>
+    </div>
+
+    <div class="container">
+        <h2>استكشاف الأخطاء وإصلاحها</h2>
+        
+        <div class="step">
+            <h3>مشكلة: Ollama لا تعمل</h3>
+            <p><strong>الحل:</strong> تأكد من تشغيل خدمة Ollama في الخلفية:</p>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">نسخ</button># على Windows (في PowerShell بصلاحيات المسؤول)
+Start-Service ollama
+
+# على Linux/macOS
+sudo systemctl start ollama    # إذا كنت تستخدم systemd
+sudo service ollama start      # إذا كنت تستخدم initd</pre>
+        </div>
+        
+        <div class="step">
+            <h3>مشكلة: الواجهة لا تتصل بـ Ollama</h3>
+            <p><strong>الحل:</strong> تأكد من أن عنوان API صحيح في الإعدادات (<code>http://localhost:11434</code>)</p>
+        </div>
+        
+        <div class="step">
+            <h3>مشكلة: النموذج بطيء جدًا</h3>
+            <p><strong>الحل:</strong></p>
+            <ul>
+                <li>استخدم نموذج أصغر (مثل Phi-2 أو TinyLlama)</li>
+                <li>قلل قيمة سياق المحادثة (<code>--num_ctx 1024</code> أو أقل)</li>
+                <li>قلل قيمة عينات التنبؤ (<code>--num_predict 512</code>)</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>تم إنشاء هذا الدليل لمساعدة المبرمجين ومعربي الألعاب على استخدام نماذج الذكاء الاصطناعي محلياً.</p>
+        <p>© 2025 - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        function copyToClipboard(button) {
+            const pre = button.parentElement;
+            const text = pre.textContent.replace('نسخ', '').trim();
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'تم النسخ!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+        
+        function switchTab(event, tabId) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Deactivate all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Show the selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activate the clicked tab
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
